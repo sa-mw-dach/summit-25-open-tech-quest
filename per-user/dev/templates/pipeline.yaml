@@ -3,7 +3,7 @@ apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: build-app
-  namespace: user1-dev
+  namespace: {{ .Values.namespacePermissions.user }}-dev
 spec:
   params:
     - default: app-a
