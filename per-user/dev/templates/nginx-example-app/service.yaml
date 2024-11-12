@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: nginx-example-app
-  namespace: {{ .Values.namespacePermissions.user }}-app
+  name: nginx-example
+  namespace: {{ .Values.namespacePermissions.user }}-apps
 spec:
   selector:
-    app: nginx-example-app
+    app: nginx-example
   ports:
     - protocol: TCP
       port: 8080

@@ -2,12 +2,12 @@
 kind: Route
 apiVersion: route.openshift.io/v1
 metadata:
-  name: nginx-example-app
-  namespace: {{ .Values.namespacePermissions.user }}-app
+  name: nginx-example
+  namespace: {{ .Values.namespacePermissions.user }}-apps
 spec:
   to:
     kind: Service
-    name: nginx-example-app
+    name: nginx-example
     weight: 100
   port:
     targetPort: 8080
