@@ -2,7 +2,7 @@ kind: Deployment
 apiVersion: apps/v1
 metadata:
   name: nginx-example-app
-  namespace: {{ .Values.namespacePermissions.user }}-dev
+  namespace: {{ .Values.namespacePermissions.user }}-app
   labels:
     app: nginx-example-app
     app.kubernetes.io/component: nginx-example-app
