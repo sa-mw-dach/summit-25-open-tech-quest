@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - gitops-service-mesh-admin.yaml
   - gitops-argocd-admin.yaml
+  - gitops-admin-admin.yaml
   - gitops-service-mesh-memberrolls-admin.yaml
   - otq-ocp1-login-challenge.yaml
 
