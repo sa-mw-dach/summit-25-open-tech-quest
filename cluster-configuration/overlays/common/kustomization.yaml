@@ -9,5 +9,3 @@ resources:
   - otq-ocp1-login-challenge.yaml
   - namespace-scoped/
 
-components:
-  - ../../components/resolutionrequests-cleaner/
