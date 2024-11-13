@@ -1,0 +1,39 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ArgoCD
+metadata:
+  name: openshift-gitops
+  namespace: openshift-gitops
+  annotations:
+    argocd.argoproj.io/sync-options: "ServerSideApply=true,Validate=false"
+spec:
+  server:
+    route:
+      enabled: true
+      tls:
+        insecureEdgeTerminationPolicy: Redirect
+        termination: reencrypt
+  repo:
+    resources:
+      limits:
+        cpu: '1'
+        memory: 2Gi
+      requests:
+        cpu: 1
+        memory: 256Mi
+  redis:
+    resources:
+      limits:
+        cpu: 2
+        memory: 1Mi
+      requests:
+        cpu: 1
+        memory: 512Mi
+  controller:
+    resources:
+      limits:
+        cpu: '16'
+        memory: 32Gi
+      requests:
+        cpu: 4
+        memory: 8Gi
+    sharding: {}
