@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
  - openshift-gitops/
  - opentour-infra-resolutionrequests-cleaner/
+ - rhsc-post-configuration/

@@ -1,0 +1,45 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  creationTimestamp: null
+  name: rhsc-post-configuration
+  labels:
+    app.openshift.io/runtime: ansible
+    app: rhsc-post-configuration
+    app.kubernetes.io/component: rhsc-post-configuration
+    app.kubernetes.io/instance: rhsc-post-configuration
+    app.kubernetes.io/name: rhsc-post-configuration
+    app.kubernetes.io/part-of: rhsc-post-configuration
+spec:
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: rhsc-post-configuration
+    spec:
+      serviceAccountName: rhsc-post-configuration
+      volumes:
+        - name: playbook
+          configMap:
+            name: rhsc-post-configuration-playbook
+            defaultMode: 420
+      containers:
+      - image: quay.io/redhat-emea-ssa-team/hetzner-ocp4-ansible-ee:master
+        name: rhsc-post-configuration
+        resources: {}
+        volumeMounts:
+          - name: playbook
+            mountPath: /playbook/
+        command:
+            - /bin/sh
+            - '-c'
+            - >
+              export K8S_AUTH_API_KEY=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token )
+              export K8S_AUTH_SSL_CA_CERT=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+              export K8S_AUTH_HOST=https://${KUBERNETES_SERVICE_HOST}:${KUBERNETES_SERVICE_PORT}
+
+              entrypoint ansible-runner run /runner -p /playbook/play.yaml
+
+
+      restartPolicy: Never
+status: {}
