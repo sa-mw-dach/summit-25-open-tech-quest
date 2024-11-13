@@ -8,4 +8,4 @@ resources:
   - gitops-service-mesh-memberrolls-admin.yaml
   - otq-ocp1-login-challenge.yaml
   - namespace-scoped/
-
+  - cluster-scope/
