@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: resolutionrequests-cleaner-playbook
+  name: rhsc-post-configuration-playbook
 data:
   play.yaml: |-
     #!/usr/bin/env ansible-playbook
