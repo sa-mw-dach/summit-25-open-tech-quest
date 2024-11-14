@@ -66,6 +66,17 @@ spec:
           git commit --allow-empty -m "[OpenShift Pipeline] Update $(params.app):latest deployment to $(tasks.build.results.IMAGE_DIGEST)"
           git push -v origin HEAD:main
 
+          echo "#=============================================================#"
+          echo "#        ___ _____ ___    _____ _        _    ____            #"
+          echo "#       / _ \_   _/ _ \  |  ___| |      / \  / ___|           #"
+          echo "#      | | | || || | | | | |_  | |     / _ \| |  _            #"
+          echo "#      | |_| || || |_| | |  _| | |___ / ___ \ |_| |           #"
+          echo "#       \___/ |_| \__\_\ |_|   |_____/_/   \_\____|           #"
+          echo "#                                                             #"
+          echo "#   Challange flag: CeeghaeL5se4Uog8                          #"
+          echo "#                                                             #"
+          echo "#=============================================================#"
+
       - name: USER_HOME
         value: /root
       - name: VERBOSE
