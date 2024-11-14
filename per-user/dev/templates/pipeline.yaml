@@ -15,7 +15,7 @@ spec:
       params:
         - name: url
           value: >-
-            http://gitea.gitea.svc.cluster.local.:3000/user1/$(params.app).git
+            http://gitea.gitea.svc.cluster.local.:3000/$(context.pipelineRun.namespace)/$(params.app).git
       taskRef:
         kind: ClusterTask
         name: git-clone
@@ -26,7 +26,7 @@ spec:
       params:
         - name: IMAGE
           value: >-
-            image-registry.openshift-image-registry.svc:5000/user1-apps/$(params.app):main
+            image-registry.openshift-image-registry.svc:5000/$(context.pipelineRun.namespace)/$(params.app):main
         - name: DOCKERFILE
           value: ./Containerfile
       runAfter:
@@ -95,7 +95,7 @@ spec:
       params:
       - name: url
         value: >-
-          http://gitea.gitea.svc.cluster.local.:3000/user1/gitops.git
+          http://gitea.gitea.svc.cluster.local.:3000/$(context.pipelineRun.namespace)/gitops.git
       - name: revision
         value: main
       - name: refspec
