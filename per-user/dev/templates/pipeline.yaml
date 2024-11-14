@@ -15,7 +15,7 @@ spec:
       params:
         - name: url
           value: >-
-            http://gitea.gitea.svc.cluster.local.:3000/$(context.pipelineRun.namespace)/$(params.app).git
+            http://gitea.gitea.svc.cluster.local.:3000/{{ .Values.namespacePermissions.user }}/$(params.app).git
       taskRef:
         kind: ClusterTask
         name: git-clone
@@ -95,7 +95,7 @@ spec:
       params:
       - name: url
         value: >-
-          http://gitea.gitea.svc.cluster.local.:3000/$(context.pipelineRun.namespace)/gitops.git
+          http://gitea.gitea.svc.cluster.local.:3000/{{ .Values.namespacePermissions.user }}/gitops.git
       - name: revision
         value: main
       - name: refspec
