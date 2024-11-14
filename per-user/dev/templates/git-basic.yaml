@@ -4,8 +4,10 @@ apiVersion: v1
 metadata:
   name: git-basic-auth
   namespace: {{ .Values.namespacePermissions.user }}-dev
-data:
-  .git-credentials: aHR0cDovL3VzZXIxOm9wZW5zaGlmdEBnaXRlYS5naXRlYS5zdmMuY2x1c3Rlci5sb2NhbC46MzAwMA==
-  .gitconfig: W2NyZWRlbnRpYWwgImh0dHA6Ly9naXRlYS5naXRlYS5zdmMuY2x1c3Rlci5sb2NhbC46MzAwMCJdCiAgaGVscGVyID0gc3RvcmU=
+stringData:
+  .git-credentials: "http://{{ .Values.namespacePermissions.user }}:openshift@gitea.gitea.svc.cluster.local.:3000"
+  .gitconfig: |
+    [credential "http://gitea.gitea.svc.cluster.local.:3000"]
+      helper = store
 type: Opaque
 
