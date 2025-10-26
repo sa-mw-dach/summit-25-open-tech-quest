@@ -1,13 +1,11 @@
----
 apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
+kind: ClusterRoleBinding
 metadata:
-  name: gitops-admin
+  name: rhsc-post-configuration
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: admin
+  name: rhsc-post-configuration
 subjects:
 - kind: ServiceAccount
-  namespace: openshift-gitops
-  name: openshift-gitops-argocd-application-controller
+  name: rhsc-post-configuration

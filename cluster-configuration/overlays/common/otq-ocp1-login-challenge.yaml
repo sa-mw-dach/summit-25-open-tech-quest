@@ -1,0 +1,10 @@
+---
+apiVersion: console.openshift.io/v1
+kind: ConsoleNotification
+metadata:
+  name: otq-ocp1-login-challenge
+spec:
+  backgroundColor: '#ce7c00'
+  color: '#fff'
+  location: BannerTop
+  text: "Welcome to red.ht/otq-ocp1 - Here is the login challenge flag: Wai6duc9jeeZ2yoj"

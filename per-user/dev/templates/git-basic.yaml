@@ -1,0 +1,13 @@
+---
+kind: Secret
+apiVersion: v1
+metadata:
+  name: git-basic-auth
+  namespace: {{ .Values.namespacePermissions.user }}-dev
+stringData:
+  .git-credentials: "http://{{ .Values.namespacePermissions.user }}:openshift@gitea.gitea.svc.cluster.local.:3000"
+  .gitconfig: |
+    [credential "http://gitea.gitea.svc.cluster.local.:3000"]
+      helper = store
+type: Opaque
+

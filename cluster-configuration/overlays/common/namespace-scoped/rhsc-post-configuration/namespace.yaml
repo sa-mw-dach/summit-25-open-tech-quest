@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  annotations:
+    openshift.io/description: ""
+    openshift.io/display-name: "Summit Connect post-configuration"
+    openshift.io/requester: system:masters
+  labels:
+    kubernetes.io/metadata.name: rhsc-post-configuration
+  name: rhsc-post-configuration
+spec: {}
