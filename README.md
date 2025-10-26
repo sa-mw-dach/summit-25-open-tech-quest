@@ -1,1 +1,1 @@
-# microservice-introduction-gitops-infra 
+# Open Tech Quest env for Summit Connect 2025
