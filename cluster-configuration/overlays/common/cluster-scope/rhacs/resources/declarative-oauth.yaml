@@ -1,0 +1,20 @@
+apiVersion: v1
+data:
+  rbac.yaml: |
+    name: OpenShift Authentication
+    minimumRole: Analyst
+    uiEndpoint: rhacs.apps.ocp4.pleasedonotuse.win:443
+    extraUIEndpoints:
+        - central-alt.custom-domain.com:443
+    groups:
+        - key: groups
+          value: cluster-admins
+          role: Admin
+    openshift:
+        enable: true
+kind: ConfigMap
+metadata:
+  name: declarative-oauth
+  namespace: rhacs
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
