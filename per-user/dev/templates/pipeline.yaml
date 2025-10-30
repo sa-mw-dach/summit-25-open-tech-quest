@@ -13,12 +13,18 @@ spec:
   tasks:
     - name: git-clone-source
       params:
-        - name: url
+        - name: URL
           value: >-
             http://gitea.gitea.svc.cluster.local.:3000/{{ .Values.namespacePermissions.user }}/$(params.app).git
       taskRef:
-        kind: ClusterTask
-        name: git-clone
+        resolver: cluster
+        params:
+          - name: kind
+            value: task
+          - name: name
+            value: git-clone
+          - name: namespace
+            value: openshift-pipelines
       workspaces:
         - name: output
           workspace: source
@@ -32,8 +38,14 @@ spec:
       runAfter:
         - git-clone-source
       taskRef:
-        kind: ClusterTask
-        name: buildah
+        resolver: cluster
+        params:
+          - name: kind
+            value: task
+          - name: name
+            value: buildah
+          - name: namespace
+            value: openshift-pipelines
       workspaces:
         - name: source
           workspace: source
@@ -46,25 +58,25 @@ spec:
         value: bot@example.com
       - name: GIT_SCRIPT
         value: |
-          cd $(workspaces.source.path)
-          wget  https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv5.1.1/kustomize_v5.1.1_linux_amd64.tar.gz
-          tar xzvf kustomize_v5.1.1_linux_amd64.tar.gz
+          # cd $(workspaces.source.path)
+          # curl -L -O https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv5.1.1/kustomize_v5.1.1_linux_amd64.tar.gz
+          # tar xzvf kustomize_v5.1.1_linux_amd64.tar.gz
 
 
-          cd gitops/
+          # cd gitops/
 
-          git config --global --add safe.directory $(pwd)
+          # git config --global --add safe.directory $(pwd)
 
-          git fetch origin
-          git rebase origin/main
+          # git fetch origin
+          # git rebase origin/main
 
           # https://issues.redhat.com/browse/SRVKP-3160
-          IMAGE_URL=$(echo -n "$(tasks.build.results.IMAGE_URL)" | sed 's/:main$/\@$(tasks.build.results.IMAGE_DIGEST)/' | tr -d "\n")
-          $(workspaces.source.path)/kustomize  edit set image $(params.app):latest=${IMAGE_URL}
+          # IMAGE_URL=$(echo -n "$(tasks.build.results.IMAGE_URL)" | sed 's/:main$/\@$(tasks.build.results.IMAGE_DIGEST)/' | tr -d "\n")
+          # $(workspaces.source.path)/kustomize  edit set image $(params.app):latest=${IMAGE_URL}
 
-          git add kustomization.yaml
-          git commit --allow-empty -m "[OpenShift Pipeline] Update $(params.app):latest deployment to $(tasks.build.results.IMAGE_DIGEST)"
-          git push -v origin HEAD:main
+          # git add kustomization.yaml
+          # git commit --allow-empty -m "[OpenShift Pipeline] Update $(params.app):latest deployment to $(tasks.build.results.IMAGE_DIGEST)"
+          # git push -v origin HEAD:main
 
           echo "#=============================================================#"
           echo "#        ___ _____ ___    _____ _        _    ____            #"
@@ -73,7 +85,7 @@ spec:
           echo "#      | |_| || || |_| | |  _| | |___ / ___ \ |_| |           #"
           echo "#       \___/ |_| \__\_\ |_|   |_____/_/   \_\____|           #"
           echo "#                                                             #"
-          echo "#   Challange flag: CeeghaeL5se4Uog8                          #"
+          echo "#   Challange flag: cei8aenae1Oothai                          #"
           echo "#                                                             #"
           echo "#=============================================================#"
 
@@ -84,8 +96,14 @@ spec:
       runAfter:
       - git-clone-gitops
       taskRef:
-        kind: ClusterTask
-        name: git-cli
+        resolver: cluster
+        params:
+          - name: kind
+            value: task
+          - name: name
+            value: git-cli
+          - name: namespace
+            value: openshift-pipelines
       workspaces:
       - name: source
         workspace: source
@@ -93,42 +111,42 @@ spec:
         workspace: git-basic-auth
     - name: git-clone-gitops
       params:
-      - name: url
+      - name: URL
         value: >-
           http://gitea.gitea.svc.cluster.local.:3000/{{ .Values.namespacePermissions.user }}/gitops.git
-      - name: revision
+      - name: REVISION
         value: main
-      - name: refspec
+      - name: REFSPEC
         value: ""
-      - name: submodules
+      - name: SUBMODULES
         value: "true"
-      - name: depth
+      - name: DEPTH
         value: "0"
-      - name: sslVerify
+      - name: SSL_VERIFY
         value: "true"
-      - name: crtFileName
+      - name: CRT_FILENAME
         value: ca-bundle.crt
-      - name: subdirectory
+      - name: SUBDIRECTORY
         value: gitops
-      - name: sparseCheckoutDirectories
+      - name: SPARSE_CHECKOUT_DIRECTORIES
         value: ""
-      - name: deleteExisting
+      - name: DELETE_EXISTING
         value: "true"
-      - name: httpProxy
-        value: ""
-      - name: httpsProxy
-        value: ""
-      - name: noProxy
-        value: ""
-      - name: verbose
+      - name: VERBOSE
         value: "true"
-      - name: userHome
+      - name: USER_HOME
         value: /home/git
       runAfter:
       - build
       taskRef:
-        kind: ClusterTask
-        name: git-clone
+        resolver: cluster
+        params:
+          - name: kind
+            value: task
+          - name: name
+            value: git-clone
+          - name: namespace
+            value: openshift-pipelines
       workspaces:
       - name: output
         workspace: source
