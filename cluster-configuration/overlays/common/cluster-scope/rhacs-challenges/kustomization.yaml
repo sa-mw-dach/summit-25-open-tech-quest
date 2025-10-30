@@ -4,3 +4,4 @@ kind: Kustomization
 resources:
   - uuidapp-deployment.yaml
   - networkapp-deployment.yaml
+  - namespace.yaml
