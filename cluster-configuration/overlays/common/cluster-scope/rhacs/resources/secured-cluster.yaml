@@ -15,3 +15,14 @@ spec:
     listenOnUpdates: true
   processBaselines:
     autoLock: Enabled
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: collector-config
+  namespace: rhacs
+data:
+  runtime_config.yaml: |
+    networking:
+      externalIps:
+        enabled: ENABLED

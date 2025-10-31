@@ -37,7 +37,7 @@ data:
                 applicationMenu:
                   section: Red Hat Applications
                   imageURL: 'https://upload.wikimedia.org/wikipedia/commons/3/3a/OpenShift-LogoType.svg'
-                href: "https://rhacs.{{ '.'.join(console.resources[0].spec.host.split('.')[1:]) }}"
+                href: "https://central-stackrox.{{ '.'.join(console.resources[0].spec.host.split('.')[1:]) }}"
                 location: ApplicationMenu
                 text: 'Red Hat Advanced Cluster Security for Kubernetes'
 
@@ -51,10 +51,11 @@ data:
                 name: rhacs-default-tls-cert
                 namespace: stackrox
               spec:
+                # central-stackrox is long for the commonName (64 characters)
                 commonName: "rhacs.{{ '.'.join(console.resources[0].spec.host.split('.')[1:]) }}"
                 secretName: rhacs-default-tls-cert
                 dnsNames:
-                  - "rhacs.{{ '.'.join(console.resources[0].spec.host.split('.')[1:]) }}"
+                  - "central-stackrox.{{ '.'.join(console.resources[0].spec.host.split('.')[1:]) }}"
                 issuerRef:
                   name: zerossl-production-ec2
                   kind: ClusterIssuer

@@ -83,3 +83,15 @@ spec:
         minReplicas: 2
         replicas: 3
     scannerComponent: Enabled
+  overlays:
+  - kind: Deployment
+    name: central
+    patches:
+    - path: spec.template.spec.containers[name:central].env[-1]
+      value: |
+        name: ROX_BASELINE_GENERATION_DURATION
+        value: "15m"
+    - path: spec.template.spec.containers[name:central].env[-1]
+      value: |
+        name: ROX_NETWORK_BASELINE_OBSERVATION_PERIOD
+        value: "15m"
