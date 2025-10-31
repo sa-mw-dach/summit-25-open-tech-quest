@@ -21,6 +21,10 @@ data:
             namespace: stackrox
           register: rhacs
 
+        - name: debug rhacs variables
+          debug:
+            var: rhacs
+
         - name: Create consolelinks for rhacs
           kubernetes.core.k8s:
             state: present
