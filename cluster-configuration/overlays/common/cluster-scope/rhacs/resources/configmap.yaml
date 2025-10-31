@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: rhacs-post-configuration-playbook
-  namespace: rhacs
+  namespace: stackrox
   annotations:
     argocd.argoproj.io/sync-wave: "2"
 data:
@@ -17,13 +17,13 @@ data:
           kubernetes.core.k8s_info:
             api_version: route.openshift.io/v1
             kind: Route
-            name: central
-            namespace: stackrox
-          register: rhacs
+            name: console
+            namespace: openshift-console
+          register: console
 
-        - name: debug rhacs variables
+        - name: debug console variables
           debug:
-            var: rhacs
+            var: console
 
         - name: Create consolelinks for rhacs
           kubernetes.core.k8s:
@@ -37,7 +37,7 @@ data:
                 applicationMenu:
                   section: Red Hat Applications
                   imageURL: 'https://upload.wikimedia.org/wikipedia/commons/3/3a/OpenShift-LogoType.svg'
-                href: "https://{{rhacs.resources[0].spec.host}}"
+                href: "https://rhacs.{{ '.'.join(console.resources[0].spec.host.split('.')[1:]) }}"
                 location: ApplicationMenu
                 text: 'Red Hat Advanced Cluster Security for Kubernetes'
 
@@ -51,5 +51,10 @@ data:
                 name: rhacs-default-tls-cert
                 namespace: stackrox
               spec:
-                commonName: "{{rhacs.resources[0].spec.host}}"
+                commonName: "rhacs.{{ '.'.join(console.resources[0].spec.host.split('.')[1:]) }}"
                 secretName: rhacs-default-tls-cert
+                dnsNames:
+                  - "rhacs.{{ '.'.join(console.resources[0].spec.host.split('.')[1:]) }}"
+                issuerRef:
+                  name: zerossl-production-ec2
+                  kind: ClusterIssuer

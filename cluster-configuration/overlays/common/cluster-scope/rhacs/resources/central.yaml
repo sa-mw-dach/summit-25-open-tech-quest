@@ -29,6 +29,8 @@ spec:
     openshift:
       enabled: true
   central:
+    defaultTLSSecret:
+      name: "rhacs-default-tls-cert"
     notifierSecretsEncryption:
       enabled: false
     exposure:

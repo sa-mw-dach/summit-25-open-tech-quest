@@ -10,6 +10,8 @@ metadata:
     app.kubernetes.io/instance: rhacs-post-configuration
     app.kubernetes.io/name: rhacs-post-configuration
     app.kubernetes.io/part-of: rhacs-post-configuration
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
 spec:
   template:
     metadata:
