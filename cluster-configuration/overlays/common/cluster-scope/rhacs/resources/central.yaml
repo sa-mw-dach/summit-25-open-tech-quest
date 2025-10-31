@@ -39,7 +39,7 @@ spec:
         enabled: false
       route:
         enabled: true
-        host: rhacs.apps.ocp4.pleasedonotuse.win
+#        host: rhacs.apps.ocp4.pleasedonotuse.win
     telemetry:
       enabled: true
     db:
