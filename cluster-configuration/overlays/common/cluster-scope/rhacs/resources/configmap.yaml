@@ -4,7 +4,7 @@ metadata:
   name: rhacs-post-configuration-playbook
   namespace: rhacs
   annotations:
-    argocd.argoproj.io/sync-wave: "4"
+    argocd.argoproj.io/sync-wave: "2"
 data:
   play.yaml: |-
     #!/usr/bin/env ansible-playbook
