@@ -8,5 +8,8 @@ resources:
   - declarative-oauth.yaml
   - rbac.yaml
   - secured-cluster.yaml
+  - serviceaccount.yaml
+  - configmap.yaml
+  - job.yaml
 
 namespace: stackrox

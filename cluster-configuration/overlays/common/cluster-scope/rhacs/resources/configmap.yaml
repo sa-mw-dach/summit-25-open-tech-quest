@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rhsc-post-configuration-playbook
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
+data:
+  play.yaml: |-
+    #!/usr/bin/env ansible-playbook
+    ---
+    - hosts: localhost
+      gather_facts: false
+      tasks:
+
+        - name: Get rhacs route
+          kubernetes.core.k8s_info:
+            api_version: route.openshift.io/v1
+            kind: Route
+            name: central
+            namespace: stackrox
+          register: rhacs
+
+        - name: Create consolelinks for rhacs
+          kubernetes.core.k8s:
+            state: present
+            definition:
+              apiVersion: console.openshift.io/v1
+              kind: ConsoleLink
+              metadata:
+                name: rhacs
+              spec:
+                applicationMenu:
+                  section: Red Hat Applications
+                  imageURL: 'https://upload.wikimedia.org/wikipedia/commons/3/3a/OpenShift-LogoType.svg'
+                href: "https://{{rhacs.resources[0].spec.host}}"
+                location: ApplicationMenu
+                text: 'Red Hat Advanced Cluster Security for Kubernetes'
+
+        - name: create certificate for rhacs
+          kubernetes.core.k8s:
+            state: present
+            definition:
+              apiVersion: cert-manager.io/v1
+              kind: Certificate
+              metadata:
+                name: rhacs-default-tls-cert
+                namespace: stackrox
+              spec:
+                commonName: "{{rhacs.resources[0].spec.host}}"
+                secretName: rhacs-default-tls-cert
