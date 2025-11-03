@@ -56,6 +56,7 @@ data:
                 secretName: rhacs-default-tls-cert
                 dnsNames:
                   - "central-stackrox.{{ '.'.join(console.resources[0].spec.host.split('.')[1:]) }}"
+                  - "rhacs.{{ '.'.join(console.resources[0].spec.host.split('.')[1:]) }}"
                 issuerRef:
                   name: zerossl-production-ec2
                   kind: ClusterIssuer
