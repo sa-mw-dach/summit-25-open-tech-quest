@@ -1,0 +1,62 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rhacs-post-configuration-playbook
+  namespace: stackrox
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+data:
+  play.yaml: |-
+    #!/usr/bin/env ansible-playbook
+    ---
+    - hosts: localhost
+      gather_facts: false
+      tasks:
+
+        - name: Get rhacs route
+          kubernetes.core.k8s_info:
+            api_version: route.openshift.io/v1
+            kind: Route
+            name: console
+            namespace: openshift-console
+          register: console
+
+        - name: debug console variables
+          debug:
+            var: console
+
+        - name: Create consolelinks for rhacs
+          kubernetes.core.k8s:
+            state: present
+            definition:
+              apiVersion: console.openshift.io/v1
+              kind: ConsoleLink
+              metadata:
+                name: rhacs
+              spec:
+                applicationMenu:
+                  section: Red Hat Applications
+                  imageURL: 'https://upload.wikimedia.org/wikipedia/commons/3/3a/OpenShift-LogoType.svg'
+                href: "https://central-stackrox.{{ '.'.join(console.resources[0].spec.host.split('.')[1:]) }}"
+                location: ApplicationMenu
+                text: 'Red Hat Advanced Cluster Security for Kubernetes'
+
+        - name: create certificate for rhacs
+          kubernetes.core.k8s:
+            state: present
+            definition:
+              apiVersion: cert-manager.io/v1
+              kind: Certificate
+              metadata:
+                name: rhacs-default-tls-cert
+                namespace: stackrox
+              spec:
+                # central-stackrox is long for the commonName (64 characters)
+                commonName: "rhacs.{{ '.'.join(console.resources[0].spec.host.split('.')[1:]) }}"
+                secretName: rhacs-default-tls-cert
+                dnsNames:
+                  - "central-stackrox.{{ '.'.join(console.resources[0].spec.host.split('.')[1:]) }}"
+                  - "rhacs.{{ '.'.join(console.resources[0].spec.host.split('.')[1:]) }}"
+                issuerRef:
+                  name: zerossl-production-ec2
+                  kind: ClusterIssuer

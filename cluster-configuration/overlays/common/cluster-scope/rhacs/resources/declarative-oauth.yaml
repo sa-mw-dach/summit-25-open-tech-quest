@@ -1,0 +1,17 @@
+apiVersion: v1
+data:
+  rbac.yaml: |
+    name: OpenShift Authentication
+    minimumRole: Analyst
+    groups:
+        - key: groups
+          value: cluster-admins
+          role: Admin
+    openshift:
+        enable: true
+kind: ConfigMap
+metadata:
+  name: declarative-oauth
+  namespace: rhacs
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"

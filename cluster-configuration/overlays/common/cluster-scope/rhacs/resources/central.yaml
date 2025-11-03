@@ -1,0 +1,97 @@
+# ---
+# apiVersion: cert-manager.io/v1
+# kind: Certificate
+# metadata:
+#   name: central-default-tls-cert
+#   namespace: rhacs
+#   annotations:
+#     argocd.argoproj.io/sync-wave: "1"
+#     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+# spec:
+#   commonName: "rhacs.apps.ocp4.pleasedonotuse.win"
+#   secretName: central-default-tls-cert
+#   dnsNames:
+#   - "rhacs.apps.ocp4.pleasedonotuse.win"
+#   issuerRef:
+#     name: acme-letsencrypt
+#     kind: ClusterIssuer
+---
+apiVersion: platform.stackrox.io/v1alpha1
+kind: Central
+metadata:
+  name: rhacs-central-services
+  namespace: rhacs
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  monitoring:
+    openshift:
+      enabled: true
+  central:
+    defaultTLSSecret:
+      name: "rhacs-default-tls-cert"
+    notifierSecretsEncryption:
+      enabled: false
+    exposure:
+      loadBalancer:
+        enabled: false
+        port: 443
+      nodePort:
+        enabled: false
+      route:
+        enabled: true
+#        host: rhacs.apps.ocp4.pleasedonotuse.win
+    telemetry:
+      enabled: true
+    db:
+      isEnabled: Default
+      persistence:
+        persistentVolumeClaim:
+          claimName: central-db
+    persistence:
+      persistentVolumeClaim:
+        claimName: rhacs-db
+    declarativeConfiguration:
+      configMaps:
+        - name: declarative-oauth
+  egress:
+    connectivityPolicy: Online
+  scannerV4:
+    db:
+      persistence:
+        persistentVolumeClaim:
+          claimName: scanner-v4-db
+    indexer:
+      scaling:
+        autoScaling: Enabled
+        maxReplicas: 5
+        minReplicas: 2
+        replicas: 3
+    matcher:
+      scaling:
+        autoScaling: Enabled
+        maxReplicas: 5
+        minReplicas: 2
+        replicas: 3
+    scannerComponent: Enabled
+  scanner:
+    analyzer:
+      scaling:
+        autoScaling: Enabled
+        maxReplicas: 5
+        minReplicas: 2
+        replicas: 3
+    scannerComponent: Enabled
+  overlays:
+  - kind: Deployment
+    name: central
+    patches:
+    - path: spec.template.spec.containers[name:central].env[-1]
+      value: |
+        name: ROX_BASELINE_GENERATION_DURATION
+        value: "15m"
+    - path: spec.template.spec.containers[name:central].env[-1]
+      value: |
+        name: ROX_NETWORK_BASELINE_OBSERVATION_PERIOD
+        value: "15m"
